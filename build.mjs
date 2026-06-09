@@ -1,120 +1,202 @@
-import { build } from 'esbuild';
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
-import { navItems, proposal } from './src/proposalData.js';
 
 await rm('dist', { recursive: true, force: true });
 await mkdir('dist/assets', { recursive: true });
 await cp('public', 'dist', { recursive: true });
-
-await build({
-  entryPoints: ['src/main.jsx'],
-  bundle: true,
-  format: 'iife',
-  globalName: 'WellxProposal',
-  splitting: false,
-  minify: true,
-  sourcemap: false,
-  outdir: 'dist/assets',
-  entryNames: 'app',
-  assetNames: '[name]',
-  loader: {
-    '.css': 'css',
-    '.woff2': 'file',
-    '.woff': 'file',
-    '.ttf': 'file',
-  },
-  jsx: 'automatic',
-});
+await cp('src/styles.css', 'dist/assets/app.css');
 
 const html = await readFile('index.html', 'utf8');
-const list = (items, cls = '') => items.map((item) => `<div class="${cls}"><span class="inlineIcon">✓</span>${item}</div>`).join('');
-const staticMarkup = `
-<main>
-  <div class="progress" style="transform:scaleX(1)"></div>
-  <header class="navBar">
-    <a class="wordmark" href="#top"><span class="wellxMark">w</span><span>Wellx</span><small>for AIMS Gulf</small></a>
-    <nav class="navLinks open staticNav">${navItems.map(([id, label]) => `<a href="#${id}">${label}</a>`).join('')}</nav>
-  </header>
-  <section class="hero" id="top">
-    <div class="heroGlow"></div>
-    <div class="heroContent">
-      <div class="proposalTag"><span>Commercial proposal</span><span>${proposal.client}</span></div>
-      <h1>${proposal.title}</h1>
-      <div class="heroPillars">
-        <div><span class="inlineIcon">✓</span>One platform for employee wellbeing</div>
-        <div><span class="inlineIcon">✓</span>One data layer for HR and insurers</div>
-        <div><span class="inlineIcon">✓</span>One commercial edge for brokers</div>
+
+const scenes = `
+<main class="immersive">
+  <aside class="storyNav" aria-label="Proposal journey">
+    <a href="#opening">01 <span>Opening</span></a>
+    <a href="#shift">02 <span>Broker shift</span></a>
+    <a href="#fragmentation">03 <span>Fragmentation</span></a>
+    <a href="#system">04 <span>Wellx layer</span></a>
+    <a href="#proof">05 <span>Proof</span></a>
+    <a href="#commercial">06 <span>Commercials</span></a>
+    <a href="#path">07 <span>Path</span></a>
+  </aside>
+
+  <section class="scene opening" id="opening">
+    <div class="sceneCopy">
+      <p class="eyebrow">Wellx for AIMS Gulf Insurance Brokers</p>
+      <h1>A single gateway to health, wellness and insurance value</h1>
+      <div class="threeLines">
+        <span>One platform for employee wellbeing</span>
+        <span>One data layer for HR and insurers</span>
+        <span>One commercial edge for brokers</span>
       </div>
-      <div class="heroActions"><a class="primary" href="#opportunity">Explore the proposal</a><a class="secondary" href="#commercial">View commercial options</a></div>
+      <div class="ctaRow">
+        <a href="#shift">Enter proposal</a>
+        <a href="#commercial">Commercial model</a>
+      </div>
     </div>
-    <div class="heroDevice">${phone()}${dashboardMini()}</div>
+    <figure class="productHero">
+      <img src="/deck-assets/phone-stack.jpg" alt="Wellx app screenshots showing leaderboard, rewards, goals and relaxation content" />
+    </figure>
   </section>
-  <section class="section" id="opportunity">
-    ${header('The broker opportunity', 'Your clients are asking for more than insurance.')}
-    <div class="boardroom">${proposal.brokerShift.map(([from, to]) => `<article><span>${from}</span><span class="inlineIcon">›</span><strong>${to}</strong></article>`).join('')}</div>
-    <p class="lead">AIMS can move from placement partner to year-round value partner. Wellx gives each client a daily experience, and gives AIMS renewal evidence that price alone cannot create.</p>
+
+  <section class="scene boardroom" id="shift">
+    <div class="sceneCopy narrow">
+      <p class="eyebrow">The broker opportunity</p>
+      <h2>Your clients are asking for more than insurance.</h2>
+      <p>AIMS can move from placement partner to year-round value partner. Wellx gives each client a daily experience, and gives AIMS renewal evidence that price alone cannot create.</p>
+    </div>
+    <div class="shiftWall">
+      <article><small>From</small><strong>Annual renewal conversations</strong><span>to year-round engagement</span></article>
+      <article><small>From</small><strong>Price-led selling</strong><span>to value-led selling</span></article>
+      <article><small>From</small><strong>Scattered vendors</strong><span>to one measurable platform</span></article>
+    </div>
   </section>
-  <section class="section" id="model">
-    ${header('The fragmented model', 'Scattered tools weaken the renewal story.')}
-    <div class="collapseStage"><div class="scatter">${proposal.fragmentedTools.map((tool, index) => `<div class="vendor vendor${index + 1}">${tool}</div>`).join('')}</div><div class="wellxLayer"><span>Wellx layer</span><strong>One connected experience</strong><p>Engagement, rewards, health intelligence and insurance reporting in one measurable operating layer.</p></div></div>
-    <h3 class="closingLine">Fragmentation creates complexity. Wellx creates one measurable experience.</h3>
+
+  <section class="scene fragmentation" id="fragmentation">
+    <div class="sceneCopy">
+      <p class="eyebrow">The fragmented model</p>
+      <h2>Clients are buying six tools when they need one operating layer.</h2>
+    </div>
+    <div class="fragmentGrid" aria-label="Fragmented tools">
+      <span>Mental wellbeing</span>
+      <span>Rewards programmes</span>
+      <span>Engagement tools</span>
+      <span>Reporting tools</span>
+      <span>Wellness challenges</span>
+      <span>HR spreadsheets</span>
+    </div>
+    <div class="wellxMerge">
+      <strong>Fragmentation creates complexity.</strong>
+      <span>Wellx creates one measurable experience.</span>
+    </div>
   </section>
-  <section class="section" id="os">
-    ${header('The Wellx operating system', 'Three connected layers, built for daily action and renewal intelligence.')}
-    <div class="osDiagram">${proposal.layers.map((layer, index) => `<article class="osLayer"><span class="layerIndex">0${index + 1}</span><h3>${layer.name}</h3><p>${layer.detail}</p><b>${layer.signal}</b></article>`).join('')}</div>
+
+  <section class="scene system" id="system">
+    <div class="sceneCopy narrow">
+      <p class="eyebrow">The Wellx operating layer</p>
+      <h2>One platform. One experience. One outcome.</h2>
+      <p>Every screenshot here is taken from the proposal deck. The surrounding interface follows the same Wellx deck language, lavender canvas, gradient line, white rounded panels, blue accent bars, and magenta/blue signals.</p>
+    </div>
+    <div class="assetStack">
+      <figure><img src="/deck-assets/platform-gamification.jpg" alt="Gamification and challenges screenshot from the Wellx proposal deck" /></figure>
+      <figure><img src="/deck-assets/platform-rewards.jpg" alt="Benefits and rewards screenshot from the Wellx proposal deck" /></figure>
+      <figure><img src="/deck-assets/platform-hr.jpg" alt="HR intelligence portal screenshot from the Wellx proposal deck" /></figure>
+      <figure><img src="/deck-assets/platform-calendar.jpg" alt="Wellbeing content calendar screenshot from the Wellx proposal deck" /></figure>
+    </div>
   </section>
-  <section class="section" id="stakeholders">
-    ${header('Four stakeholders, one experience', 'The same system creates value for every participant.')}
-    <div class="stakeholderShell"><div class="stakeholderTabs">${proposal.stakeholders.map((item) => `<a class="${item.featured ? 'featured' : ''}" href="#stakeholders">${item.name}</a>`).join('')}</div><div class="stakeholderPanel"><span class="inlineIcon">✦</span><h3>Broker</h3><p>Differentiate, retain accounts, open new revenue streams.</p><strong>Highlighted for AIMS Gulf</strong></div></div>
+
+  <section class="scene intelligence" id="intelligence">
+    <div class="sceneCopy">
+      <p class="eyebrow">What HR gains</p>
+      <h2>Insights over assumptions.</h2>
+      <div class="insightList">
+        <article><span>01</span><strong>See workforce participation clearly.</strong><p>Track real-time engagement without manual surveys.</p></article>
+        <article><span>02</span><strong>Spot team fatigue signals early.</strong><p>Aggregate mood data reveals team health trends.</p></article>
+        <article><span>03</span><strong>Support retention with real data.</strong><p>Show the exact value of the wellbeing investment.</p></article>
+      </div>
+    </div>
+    <figure class="laptopShot">
+      <img src="/deck-assets/hr-dashboard-laptop.jpg" alt="Wellx HR dashboard laptop screenshot from the proposal deck" />
+    </figure>
   </section>
-  <section class="trust" id="momentum">
-    <div class="metricsStrip">${proposal.proof.map((item) => `<div><strong>${item.value}</strong><span>${item.label}</span></div>`).join('')}</div>
-    <section class="section">${header('Trust and momentum', 'Proof from leading employers across the Gulf and beyond.')}<div class="logoWall">${proposal.logos.map((logo) => `<div>${logo}</div>`).join('')}</div></section>
+
+  <section class="scene proof" id="proof">
+    <div class="sceneCopy">
+      <p class="eyebrow">Trust and momentum</p>
+      <h2>Proof from leading employers across the Gulf and beyond.</h2>
+      <div class="metrics">
+        <b>100,000+<span>users</span></b>
+        <b>8.3/10<span>satisfaction</span></b>
+        <b>90%<span>retention</span></b>
+        <b>400+<span>employers and partners</span></b>
+      </div>
+    </div>
+    <figure class="logosShot">
+      <img src="/deck-assets/trusted-logos.jpg" alt="Trusted employer and partner logos from the Wellx proposal deck" />
+    </figure>
   </section>
-  <section class="section" id="experience">
-    ${header('Product experience', 'The product becomes the daily reason clients feel Wellx.')}
-    <div class="productShowcase">${phone()}<div class="momentGrid">${proposal.productMoments.map((moment) => `<div class="momentCard"><span class="inlineIcon">✦</span><span>${moment}</span></div>`).join('')}</div></div>
+
+  <section class="scene aims" id="aims">
+    <div class="sceneCopy">
+      <p class="eyebrow">Why this matters to AIMS</p>
+      <h2>AIMS can turn wellbeing into a portfolio advantage.</h2>
+    </div>
+    <div class="aimsMatrix">
+      <article><strong>Differentiate</strong><span>A solution corporate clients do not receive from a typical broker.</span></article>
+      <article><strong>Defend renewals</strong><span>A stronger value story than price movement alone.</span></article>
+      <article><strong>Stay close</strong><span>A daily platform that keeps AIMS present between renewals.</span></article>
+      <article><strong>Scale</strong><span>A model that can roll across the portfolio after one flagship pilot.</span></article>
+    </div>
   </section>
-  <section class="section" id="hr">
-    ${header('What HR gains', 'Executive visibility without the manual drag.')}
-    <div class="hrGrid"><div class="dashboardLarge"><div class="dashHeader"><span>HR Intelligence</span><b>Live portfolio view</b></div><div class="chartBars">${[72, 48, 84, 61, 92, 56, 78].map((h) => `<i style="height:${h}%"></i>`).join('')}</div><div class="signalRow"><span>Participation up 18%</span><span>Fatigue risk down 9%</span><span>Reward value visible</span></div></div><div class="hrGains">${proposal.hrGains.map(([title, detail]) => `<article><span class="inlineIcon">✓</span><div><strong>${title}</strong><p>${detail}</p></div></article>`).join('')}</div></div>
+
+  <section class="scene commercial" id="commercial">
+    <div class="sceneCopy">
+      <p class="eyebrow">Commercial model</p>
+      <h2>A CFO-readable decision room.</h2>
+      <p>Start with the recommended 70,000-life flagship account, then use the pilot data to roll across the AIMS book.</p>
+    </div>
+    <div class="pricingRoom">
+      <details open>
+        <summary>Per-client SaaS</summary>
+        <div class="pricingCards">
+          <article><small>Option 1</small><strong>$15</strong><span>Standard SaaS, excluding cash rewards, per member per year</span></article>
+          <article class="recommended"><small>Option 2</small><strong>$30</strong><span>Full Wellx experience, per member per year</span></article>
+          <article><small>Option 3</small><strong>$50</strong><span>Reseller model, per member per year</span></article>
+        </div>
+      </details>
+      <details>
+        <summary>Portfolio model</summary>
+        <div class="commercialList">
+          <span>Option 4, Wellx Light, up to 1 million licenses, $100,000/year</span>
+          <span>X Upgrade, $30/member/year</span>
+          <span>Broker White-label App, $50,000 one-time</span>
+          <span>Client Sub-Whitelabel, $3,000 one-time</span>
+          <span>Ring-Fenced Cloud, $100,000/year</span>
+        </div>
+      </details>
+      <details>
+        <summary>Volume-based model</summary>
+        <div class="tierRail">
+          <span>First 10,000, $30</span>
+          <span>Next 40,000, $25</span>
+          <span>Next 50,000, $22</span>
+          <span>Next 100,000, $18</span>
+          <span>Next 100,000, $15</span>
+        </div>
+      </details>
+    </div>
   </section>
-  <section class="section" id="aims">
-    ${header('Why this matters to AIMS', 'AIMS can turn wellbeing into a portfolio advantage.')}
-    <div class="aimsPanel"><div><h3>From policy placement to living client value.</h3><p>The flagship 70,000-life account can become the case study. The outcome becomes a repeatable renewal story across the AIMS book.</p></div><div class="aimsList">${list(proposal.aimsValue)}</div></div>
+
+  <section class="scene path" id="path">
+    <div class="sceneCopy">
+      <p class="eyebrow">Recommended path</p>
+      <h2>Start with one flagship account. Build the renewal story. Scale the book.</h2>
+    </div>
+    <div class="timeline">
+      <article><span>01</span><strong>Align on the model</strong><p>Confirm which option fits the AIMS portfolio strategy.</p></article>
+      <article><span>02</span><strong>Pilot one client</strong><p>Start with the recommended 70,000-life flagship account.</p></article>
+      <article><span>03</span><strong>Roll across the book</strong><p>Use pilot data to activate renewals with proof.</p></article>
+    </div>
   </section>
-  <section class="section" id="commercial">
-    ${header('Commercial model', 'Clear options for broker growth and CFO review.')}
-    <div class="pricingGrid">${proposal.pricing.client.map((row) => pricing(row)).join('')}${proposal.pricing.portfolio.map((row) => pricing(row, true)).join('')}${proposal.pricing.tiers.map((row) => `<article class="pricingCard compact"><span>${row[0]}</span><strong>${row[1]}</strong><p>per member per year</p></article>`).join('')}</div>
+
+  <section class="scene close">
+    <div class="sceneCopy">
+      <p class="eyebrow">Next conversation</p>
+      <h2>Let’s turn AIMS’ portfolio into a living wellness ecosystem.</h2>
+      <div class="contact">
+        <strong>Sophia Petkova-Dubbiosi</strong>
+        <span>B2B Lead</span>
+        <a href="mailto:sophia@wellxai.com">sophia@wellxai.com</a>
+        <a href="tel:+971551159183">+971 55 115 9183</a>
+        <span>wellx.global</span>
+      </div>
+    </div>
   </section>
-  <section class="section" id="path">
-    ${header('Recommended path', 'Start narrow, prove value, then scale with confidence.')}
-    <div class="stepLine">${proposal.nextSteps.map(([title, detail], index) => `<article><span>${index + 1}</span><h3>${title}</h3><p>${detail}</p></article>`).join('')}</div>
-  </section>
-  <section class="finalCta"><div><h2>Let’s turn AIMS’ portfolio into a living wellness ecosystem.</h2><div class="contactCard"><strong>${proposal.contact.name}</strong><span>${proposal.contact.role}</span><a href="mailto:${proposal.contact.email}">${proposal.contact.email}</a><a href="tel:${proposal.contact.phone.replaceAll(' ', '')}">${proposal.contact.phone}</a><span>${proposal.contact.url}</span></div></div></section>
-  <a class="toTop" href="#top">↑</a>
 </main>`;
 
 await writeFile(
   'dist/index.html',
   html
     .replace('</head>', '    <link rel="stylesheet" href="/assets/app.css" />\n  </head>')
-    .replace('    <script type="module" src="/src/main.jsx"></script>\n', '')
-    .replace('<body>', `<body>${staticMarkup}`),
+    .replace('<body>', `<body>${scenes}`)
+    .replace('    <div id="root"></div>\n    <script type="module" src="/src/main.jsx"></script>\n', ''),
 );
-
-function header(eyebrow, title) {
-  return `<div class="sectionHeader"><span>${eyebrow}</span><h2>${title}</h2></div>`;
-}
-
-function pricing(row, portfolio = false) {
-  return `<article class="pricingCard"><span>${row[0]}</span><h3>${row[1]}</h3><p>${row[2]}</p><strong>${row[3]} <small>${portfolio ? '' : row[4]}</small></strong></article>`;
-}
-
-function phone() {
-  return `<div class="phoneMock"><div class="phoneTop"></div><div class="appHero"><span>Today</span><strong>Move, breathe, earn</strong></div><div class="rings"><i></i><i></i><i></i></div><div class="phoneCards"><div><span class="inlineIcon">T</span><span>Team challenge</span><b>2nd place</b></div><div><span class="inlineIcon">$</span><span>xCoins</span><b>8,450</b></div><div><span class="inlineIcon">M</span><span>Mood</span><b>Calm</b></div></div></div>`;
-}
-
-function dashboardMini() {
-  return `<div class="dashboardMini"><span>Renewal intelligence</span><strong>70,000 lives</strong><div><i style="width:82%"></i><i style="width:64%"></i><i style="width:91%"></i></div><p>Engagement, fatigue and reward signals ready for the client review.</p></div>`;
-}
