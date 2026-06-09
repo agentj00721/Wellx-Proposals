@@ -1,0 +1,142 @@
+export const proposal = {
+  client: 'AIMS Gulf Insurance Brokers',
+  brand: 'Wellx',
+  title: 'A single gateway to health, wellness and insurance value',
+  proof: [
+    { value: '100,000+', label: 'users' },
+    { value: '8.3/10', label: 'employee satisfaction' },
+    { value: '90%', label: 'retention rate' },
+    { value: '400+', label: 'employers and partners' },
+  ],
+  brokerShift: [
+    ['From annual renewal conversations', 'to year-round engagement'],
+    ['From price-led selling', 'to value-led selling'],
+    ['From fragmented vendors', 'to one measurable platform'],
+  ],
+  fragmentedTools: [
+    'Mental wellbeing',
+    'Rewards',
+    'Challenges',
+    'Engagement',
+    'Reporting',
+    'HR spreadsheets',
+  ],
+  layers: [
+    {
+      name: 'Engagement Layer',
+      detail: 'Challenges, rewards, streaks, routines and daily member action.',
+      signal: 'Daily engagement',
+    },
+    {
+      name: 'Intelligence Layer',
+      detail: 'HR dashboard, participation, mood, fatigue and board-ready reporting.',
+      signal: 'Renewal intelligence',
+    },
+    {
+      name: 'Insurance Layer',
+      detail: 'Prevention data, insurer-ready reporting and stronger renewal evidence.',
+      signal: 'Measurable prevention',
+    },
+  ],
+  stakeholders: [
+    {
+      name: 'Member',
+      line: 'Earn rewards, build routines, feel supported daily.',
+    },
+    {
+      name: 'Employer',
+      line: 'See participation, reduce admin, support retention.',
+    },
+    {
+      name: 'Insurer',
+      line: 'Connect prevention to claims and renewal conversations.',
+    },
+    {
+      name: 'Broker',
+      line: 'Differentiate, retain accounts, open new revenue streams.',
+      featured: true,
+    },
+  ],
+  logos: [
+    'Halliburton',
+    'Savvy',
+    'Al Rajhi Takaful',
+    'Jotun',
+    'QIC',
+    'JCDecaux',
+    'ALEC',
+    'McDermott',
+    'ADIB',
+    'Emirates CAE',
+  ],
+  productMoments: [
+    'Company challenges',
+    'Team leaderboards',
+    'xCoins and rewards',
+    'Mood tracking',
+    'Guided breathwork',
+    'Personal goals',
+    'AI face scan',
+    'Care concierge',
+    'Telemedicine',
+    'HR dashboard',
+    'Wellbeing content calendar',
+  ],
+  hrGains: [
+    ['Participation visibility', 'Real-time activation and engagement by team.'],
+    ['Fatigue and mood signals', 'Aggregated trends before issues become churn.'],
+    ['Retention support', 'Evidence to show where support is landing.'],
+    ['Less manual admin', 'No spreadsheets, reward chasing or vendor juggling.'],
+    ['Board-ready reporting', 'Clear insight for leadership and renewal meetings.'],
+  ],
+  aimsValue: [
+    'A differentiated solution for corporate clients',
+    'A stronger renewal story',
+    'A reason to stay close to clients year-round',
+    'A scalable model across the portfolio',
+    'A flagship case study using the 70,000-life account',
+  ],
+  pricing: {
+    client: [
+      ['Option 1', 'Standard SaaS', 'Wellx experience excluding cash rewards', '$15', '/ member / year'],
+      ['Option 2', 'Full Wellx experience', 'Complete Wellx experience', '$30', '/ member / year'],
+      ['Option 3', 'Reseller', 'AIMS-led commercial model', '$50', '/ member / year'],
+    ],
+    portfolio: [
+      ['Option 4', 'Wellx Light', 'Up to 1 million licenses', '$100,000 / year'],
+      ['X Upgrade', 'AI Face Scan, Care Concierge, Telemedicine, Social Challenges, unlimited mental health sessions, cash rewards', '$30 / member / year'],
+      ['Broker White-label App', 'AIMS Gulf-branded broker app', '$50,000 one-time'],
+      ['Client Sub-Whitelabel', 'Dedicated client-level brand layer', '$3,000 one-time'],
+      ['Ring-Fenced Cloud', 'Dedicated cloud environment', '$100,000 / year'],
+    ],
+    tiers: [
+      ['First 10,000', '$30'],
+      ['Next 40,000', '$25'],
+      ['Next 50,000', '$22'],
+      ['Next 100,000', '$18'],
+      ['Next 100,000', '$15'],
+    ],
+  },
+  nextSteps: [
+    ['Align on the model', 'Confirm the right commercial shape for the AIMS portfolio.'],
+    ['Pilot one flagship client', 'Start with the recommended 70,000-life account.'],
+    ['Roll across the AIMS book', 'Use pilot data to activate renewals with proof.'],
+  ],
+  contact: {
+    name: 'Sophia Petkova-Dubbiosi',
+    role: 'B2B Lead',
+    email: 'sophia@wellxai.com',
+    phone: '+971 55 115 9183',
+    url: 'wellx.global',
+  },
+};
+
+export const navItems = [
+  ['opportunity', 'Opportunity'],
+  ['model', 'Model'],
+  ['os', 'Operating system'],
+  ['experience', 'Experience'],
+  ['aims', 'AIMS value'],
+  ['commercial', 'Commercials'],
+  ['path', 'Path'],
+];
